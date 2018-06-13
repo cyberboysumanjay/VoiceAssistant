@@ -12,9 +12,10 @@ v=wincl.Dispatch("SAPI.SpVoice")
 #att=cl.query('Test/Attempt')
 r=sr.Recognizer()
 r.pause_threshold=0.7
-r.energy_threshold=400
+r.energy_threshold=500
 shell=wincl.Dispatch("WScript.Shell")
-v.Speak('Hello! For a list of commands, please say "Keyword list"...')
+#v.Speak('Hello! For a list of commands, please say "Keyword list"...')
+v.Speak('At your service Sir!')
 print('Hello! For a list of commands, please say "Keyword list"...')
 
 #List of commands
@@ -42,10 +43,9 @@ while True:
     with sr.Microphone() as source:
         try:
             print("Please Speak")
-            audio=r.listen(source)
+            audio=r.listen(source,timeout=4)
             message=str(r.recognize_google(audio))
             print('You said: '+message)
-
             if google in message:
                 words=message.split()
                 del words[0:2]
@@ -62,6 +62,14 @@ while True:
                 url='https://scholar.google.com/scholar?q='+st
                 webbrowser.open(url)
                 v.Speak('Academic Results for: '+str(st))
+            elif wkp in message:
+                words=message.split()
+                del words[0:3]
+                st=' '.join(words)
+                print("Wikipedia Page of : "+str(st))
+                url='https://en.wikipedia.org/w/index.php?search='+st
+                webbrowser.open(url)
+                v.Speak('Wiki Page for: '+str(st))
         except:
             break
         finally:
