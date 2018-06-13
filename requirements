@@ -1,0 +1,6 @@
+pip install pyperclip
+pip install pyytsx
+pip install SpeechRecognition
+pip install wikipedia
+pip install webbrowser
+pip install wolframalpha
