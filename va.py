@@ -212,6 +212,47 @@ while True:
                     print('Google results for: '+str(st))
                     url='https://google.com/search?q='+st
                     webbrowser.open(url)
+            elif whis in message:
+                try:
+                    scq=cl.query(message)
+                    sca=next(scq.results).text
+                    print('\nThe answer is: '+str(sca)+'\n')
+                    v.Speak('The answer is: '+str(sca))
+                except StopIteration:
+                    try:
+                        words=message.split()
+                        del words[0:2]
+                        st=' '.join(words)
+                        wkpres=wikipedia.summary(st,sentences=2)
+                        print('\n'+'str(wkpres)'+'\n')
+                        v.Speak(wkpres)
+                    except UnicodeEncodeError:
+                        v.Speak(wkpres)
+                    except:
+                        words=message.split()
+                        del words[0:2]
+                        st=' '.join(words)
+                        print('Google results for: '+str(st))
+                        url='https://google.com/search?q='+st
+                        webbrowser.open(url)
+                        v.Speak('Google Results for: '+str(st))
+            elif wtar in message:
+                try:
+                    scq=cl.query(message)
+                    sca=next(scq.results).text
+                    print('The answer is: '+str(sca))
+                    #url='https://www.wolframalpha.com/input/?i='+st
+                    #webbrowser.open(url)
+                    v.Speak('The answer is: '+str(sca))
+                except UnicodeEncodeError:
+                    v.Speak('The answer is: '+str(sca))
+                except StopIteration:
+                    words=message.split()
+                    del words[0:2]
+                    st=' '.join(words)
+                    print('Google results for: '+str(st))
+                    url='https://google.com/search?q='+st
+                    webbrowser.open(url)
 
             elif keywd in message:
                 print('')
