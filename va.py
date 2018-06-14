@@ -25,7 +25,7 @@ google = 'search for'
 youtube='search YouTube for'
 acad = 'academic search'
 wkp = 'wiki page for'
-rdds = 'read the text'
+rdds = 'read the copied text'
 t='what is the time'
 d='what is the date'
 say='say'
@@ -46,6 +46,9 @@ lsc = 'resume listening'
 stoplst = 'stop listening'
 sc = 'deep search'
 calc='calculate'
+keywd='keyword list'
+calculat='open calculator'
+telegr='open telegram'
 
 
 while True:
@@ -55,9 +58,9 @@ while True:
             print("Waiting for your command")
 #            audio=r.listen(source,Timeout=4)
 #            message=str(r.recognize_google(audio))
-            message='calculate root of x square plus 2 x plus 1'
+            message='open calculator'
             print('You said: '+message)
-            v.Speak('Hmmmmmmm.. Seems Interesting')
+            v.Speak('Alright, I will do this for you')
             if google in message:
                 words=message.split()
                 del words[0:2]
@@ -94,11 +97,11 @@ while True:
                     v.Speak("No results found for: "+str(st))
                     continue
             elif rdds in message:
+                print('Reading your text')
                 words=message.split()
-                del words[0:3]
-                st=' '.join(words)
-                print("Reading the text: "+str(st))
-                v.Speak('Alright reading the text: '+ str(st))
+                del words[0:4]
+                v.Speak(pyperclip.paste())
+
             elif say in message:
                 words=message.split()
                 del words[0:1]
@@ -183,18 +186,47 @@ while True:
             elif bkmk in message:
                 shell.SendKeys("^d")
                 v.Speak("Alright, Page Bookmarked!")
+            elif calculat in message:
+                os.system('calc')
+            elif telegr in message:
+                words=' '.split()
+                del words [0:1]
+                st=' '.join(words)
+                print('Opening'+str(st))
+                v.Speak('Opening'+str(st))
+                os.startfile(r'''C:\Users\asus1\AppData\Roaming\Telegram Desktop\Telegram.exe''')
+            elif wtis in message:
+                try:
+                    scq=cl.query(message)
+                    sca=next(scq.results).text
+                    print('The answer is: '+str(sca))
+                    #url='https://www.wolframalpha.com/input/?i='+st
+                    #webbrowser.open(url)
+                    v.Speak('The answer is: '+str(sca))
+                except UnicodeEncodeError:
+                    v.Speak('The answer is: '+str(sca))
+                except StopIteration:
+                    words=message.split()
+                    del words[0:2]
+                    st=' '.join(words)
+                    print('Google results for: '+str(st))
+                    url='https://google.com/search?q='+st
+                    webbrowser.open(url)
+
             elif keywd in message:
                 print('')
                 print('Say " ' + google + ' " to return a Google search')
                 print('Say " ' + acad + ' " to return a Google scholar search')
                 print('Say " ' + sc + ' " to return a wolframalpha query')
                 print('Say " ' + wkp + ' " to return a wikipedia page')
-                print('Say " ' + rdds + ' " to read the text you have highlighted and Ctrl')
-                print('Say " ' + sav + ' " to read the save you have highlighted and Ctrl')
+                print('Say " ' + rdds + ' " to read the text you have highlighted and Ctrl + C (Copied to clipboard)')
+                print('Say " ' + sav + ' " to read the save you have highlighted and Ctrl + C-ed (Copied to clipboard) to a file')
                 print('Say " ' + bkmk + ' " to bookmark the current page')
                 print('Say " ' + vid + ' " to return the video results for the query')
+                print("For more general questions, ask them normally and i will do my best to find a appropriate answer for you!")
+                print('Say '+stoplst+' to shut down')
+                print('')
 #                print('Say " ' + book + ' " to return an Amazon Book Search')
-
 
         except:
             break
