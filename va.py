@@ -4,6 +4,7 @@ import wolframalpha #mathematical operations
 import time
 import os #file handling
 import pyperclip #clipping
+import wikipedia
 #import pyttsx3 as tts #text to speech_recognition
 import win32com.client as wincl
 from datetime import datetime
@@ -51,8 +52,9 @@ while True:
         try:
             v.Speak("How can I help you today?")
             print("Waiting for your command")
-            audio=r.listen(source,timeout=4)
+            audio=r.listen(source,Timeout=4)
             message=str(r.recognize_google(audio))
+            message='wiki page for '
             print('You said: '+message)
             v.Speak('Hmmmmmmm.. Seems Interesting')
             if google in message:
@@ -72,13 +74,24 @@ while True:
                 webbrowser.open(url)
                 v.Speak('Academic Results for: '+str(st))
             elif wkp in message:
-                words=message.split()
-                del words[0:3]
-                st=' '.join(words)
-                print("Wikipedia Page of : "+str(st))
-                url='https://en.wikipedia.org/w/index.php?search='+str(st)
-                webbrowser.open(url)
-                v.Speak('Wiki Page for: '+str(st))
+                try:
+                    words=message.split()
+                    del words[0:3]
+                    st=' '.join(words)
+                    wkpres=wikipedia.summary(st,sentences=2)
+                    try:
+                        print('\n'+str(wkpres)+'\n')
+                        v.Speak(wkpres)
+                    except UnicodeEncodeError:
+                        v.Speak("Sorry! Please try searching again")
+                except wikipedia.exceptions.DisambiguationError as e:
+                    print(e.options)
+                    v.Speak("Too many results for this keyword. Please be more specific and retry")
+                    continue
+                except wikipedia.exceptions.PageError as e:
+                    print("This page doesn't exist")
+                    v.Speak("No results found for: "+str(st))
+                    continue
             elif rdds in message:
                 words=message.split()
                 del words[0:3]
@@ -122,9 +135,7 @@ while True:
                 c=time.ctime()
                 words=c.split()
                 v.Speak("Today, it is"+words[2]+words[1]+words[4])
-            else:
-                res = client.query(message)
-                v.Speak(res)
+
         except:
             break
         finally:
