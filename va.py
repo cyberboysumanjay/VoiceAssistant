@@ -45,6 +45,7 @@ lsp = 'silence please'
 lsc = 'resume listening'
 stoplst = 'stop listening'
 sc = 'deep search'
+calc='calculate'
 
 
 while True:
@@ -52,9 +53,9 @@ while True:
         try:
             v.Speak("How can I help you today?")
             print("Waiting for your command")
-            audio=r.listen(source,Timeout=4)
-            message=str(r.recognize_google(audio))
-            message='wiki page for '
+#            audio=r.listen(source,Timeout=4)
+#            message=str(r.recognize_google(audio))
+            message='calculate root of x square plus 2 x plus 1'
             print('You said: '+message)
             v.Speak('Hmmmmmmm.. Seems Interesting')
             if google in message:
@@ -135,6 +136,65 @@ while True:
                 c=time.ctime()
                 words=c.split()
                 v.Speak("Today, it is"+words[2]+words[1]+words[4])
+            elif sc in message:
+                try:
+                    words=message.split()
+                    del words[0:2]
+                    st=' '.join(words)
+                    scq=cl.query(st)
+                    sca=next(scq.results).text
+                    print('The answer is: '+str(sca))
+                    url='https://www.wolframalpha.com/input/?i='+str(st)
+                    v.Speak('The answeris: '+str(sca))
+                except StopIteration:
+                    print('Your question is ambiguous. Please try with another keyword!')
+                    v.Speak('Your question is ambiguous. Please try with another keyword!')
+                except Exception as e:
+                    print(e)
+                    v.Speak(e)
+                else:
+                    v.Speak("I'm always correct")
+
+            elif calc in message:
+                try:
+                    words=message.split()
+                    del words[0:1]
+                    st=' '.join(words)
+                    scq=cl.query(st)
+                    sca=next(scq.results).text
+                    print('The answer is: '+str(sca))
+                    url='https://www.wolframalpha.com/input/?i='+str(st)
+                    v.Speak('The answer is: '+str(sca))
+                except StopIteration:
+                    print('Your question is ambiguous. Please try with another keyword!')
+                    v.Speak('Your question is ambiguous. Please try with another keyword!')
+                except Exception as e:
+                    print(e)
+                    v.Speak(e)
+                else:
+                    v.Speak("I'm always correct")
+            elif paint in message:
+                os.system('mspaint')
+            elif sav in message:
+                print('Saving your text to file')
+                with open('path to your text file','a') as f:
+                    f.write(pyperclip.paste())
+                    v.Speak('File is successfully saved')
+            elif bkmk in message:
+                shell.SendKeys("^d")
+                v.Speak("Alright, Page Bookmarked!")
+            elif keywd in message:
+                print('')
+                print('Say " ' + google + ' " to return a Google search')
+                print('Say " ' + acad + ' " to return a Google scholar search')
+                print('Say " ' + sc + ' " to return a wolframalpha query')
+                print('Say " ' + wkp + ' " to return a wikipedia page')
+                print('Say " ' + rdds + ' " to read the text you have highlighted and Ctrl')
+                print('Say " ' + sav + ' " to read the save you have highlighted and Ctrl')
+                print('Say " ' + bkmk + ' " to bookmark the current page')
+                print('Say " ' + vid + ' " to return the video results for the query')
+#                print('Say " ' + book + ' " to return an Amazon Book Search')
+
 
         except:
             break
