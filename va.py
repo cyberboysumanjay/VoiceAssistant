@@ -5,10 +5,9 @@ import time
 import os #file handling
 import pyperclip #clipping
 import wikipedia
-#import pyttsx3 as tts #text to speech_recognition
 import win32com.client as wincl
 from datetime import datetime
-
+#import pyttsx3 as tts #text to speech_recognition
 v=wincl.Dispatch("SAPI.SpVoice")
 cl=wolframalpha.Client('YVH8AY-R8H93LQAJ2')
 att=cl.query('Test/Attempt')
@@ -50,15 +49,14 @@ keywd='keyword list'
 calculat='open calculator'
 telegr='open telegram'
 
-
 while True:
     with sr.Microphone() as source:
         try:
             v.Speak("How can I help you today?")
             print("Waiting for your command")
-#            audio=r.listen(source,Timeout=4)
-#            message=str(r.recognize_google(audio))
-            message='open calculator'
+            audio=r.listen(source,Timeout=4)
+            message=str(r.recognize_google(audio))
+#            message='who is isaac newton'
             print('You said: '+message)
             v.Speak('Alright, I will do this for you')
             if google in message:
