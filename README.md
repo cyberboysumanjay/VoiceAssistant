@@ -30,7 +30,9 @@ Play songs: Just ask 'play X'
 
 .....many more to come!
 ### [More about me](https://cyberboysumanjay.github.io)
-### [Telegram Channel](t.me/cyberboysumanjay)
+### [Telegram](t.me/cyberboysumanjay)
+
+
 
 
 ----
