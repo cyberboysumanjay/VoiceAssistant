@@ -52,6 +52,8 @@ keywd='keyword list'
 calculat='open calculator'
 paint = 'open paint'
 playmusic='play'
+dlmusic='download song'
+dlvideo='download video'
 
 
 while True:
@@ -277,6 +279,45 @@ while True:
                 best=v.getbest(preftype="webm")
                 best_url=best.url
                 webbrowser.open(best_url)
+            elif dlvideo in message:
+                words=message.split()
+                del words[0:2]
+                song_name=str(' '.join(words))
+                base = "https://www.youtube.com/results?search_query="
+                r = requests.get(base+song_name)
+                page = r.text
+                soup=bs(page,'html.parser')
+                vids = soup.findAll('a',attrs={'class':'yt-uix-tile-link'})
+                videolist=[]
+                for v in vids:
+                    tmp = 'https://www.youtube.com' + v['href']
+                    videolist.append(tmp)
+                v = pafy.new(videolist[0])
+                song=str(v.title)
+                print('Checking for best available video quality for: '+song)
+                best=v.getbest()
+                best.download(quiet=False)
+
+            elif dlmusic in message:
+                words=message.split()
+                del words[0:2]
+                song_name=str(' '.join(words))
+                base = "https://www.youtube.com/results?search_query="
+                r = requests.get(base+song_name)
+                page = r.text
+                soup=bs(page,'html.parser')
+                vids = soup.findAll('a',attrs={'class':'yt-uix-tile-link'})
+                videolist=[]
+                for v in vids:
+                    tmp = 'https://www.youtube.com' + v['href']
+                    videolist.append(tmp)
+                v = pafy.new(videolist[0])
+                song=str(v.title)
+                print('Checking for best available audio quality for: '+song)
+                best=v.getbestaudio()
+                best.download()
+
+
 
             elif keywd in message:
                 print('')

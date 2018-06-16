@@ -28,6 +28,10 @@ Handle mathematical sums: Just ask 'calculate 2 times 5' or 'calculate square ro
 
 Play songs: Just ask 'play X'
 
+Download song: Just ask 'Download song X'
+
+Download video: Just ask 'Download video X'
+
 .....many more to come!
 ### [More about me](https://cyberboysumanjay.github.io)
 ### [Telegram](t.me/cyberboysumanjay)
