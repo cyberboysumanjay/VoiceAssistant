@@ -7,6 +7,10 @@ import pyperclip #clipping
 import wikipedia
 import win32com.client as wincl
 from datetime import datetime
+import pafy
+from bs4 import BeautifulSoup as bs
+import requests
+import sys
 #import pyttsx3 as tts #text to speech_recognition
 v=wincl.Dispatch("SAPI.SpVoice")
 cl=wolframalpha.Client('YVH8AY-R8H93LQAJ2')
@@ -16,14 +20,14 @@ r.pause_threshold=0.7
 r.energy_threshold=500
 shell=wincl.Dispatch("WScript.Shell")
 #v.Speak('Hello! For a list of commands, please say "Keyword list"...')
-v.Speak('At your service Sir!')
+#v.Speak('At your service Sir!')
 #print('Hello! For a list of commands, please say "Keyword list"...')
 
 #List of commands
 google = 'search for'
 youtube='search YouTube for'
 acad = 'academic search'
-wkp = 'wiki page for'
+wkp = 'wiki results for'
 rdds = 'read the copied text'
 t='what is the time'
 d='what is the date'
@@ -39,7 +43,6 @@ whws = 'who was'
 when = 'when'
 where = 'where'
 how = 'how'
-paint = 'open paint'
 lsp = 'silence please'
 lsc = 'resume listening'
 stoplst = 'stop listening'
@@ -47,17 +50,18 @@ sc = 'deep search'
 calc='calculate'
 keywd='keyword list'
 calculat='open calculator'
-telegr='open telegram'
+paint = 'open paint'
+playmusic='play'
+
 
 while True:
     with sr.Microphone() as source:
         try:
             v.Speak("How can I help you today?")
             print("Waiting for your command")
-            audio=r.listen(source,Timeout=4)
-            message=str(r.recognize_google(audio))
-#            message='who is isaac newton'
-            print('You said: '+message)
+            audio = r.listen(source, timeout = None)
+            message = str(r.recognize_google(audio))
+            print('You said: ' + message)
             v.Speak('Alright, I will do this for you')
             if google in message:
                 words=message.split()
@@ -186,13 +190,18 @@ while True:
                 v.Speak("Alright, Page Bookmarked!")
             elif calculat in message:
                 os.system('calc')
-            elif telegr in message:
-                words=' '.split()
+            elif 'open' in message:
+                words=message.split()
                 del words [0:1]
                 st=' '.join(words)
-                print('Opening'+str(st))
-                v.Speak('Opening'+str(st))
-                os.startfile(r'''C:\Users\asus1\AppData\Roaming\Telegram Desktop\Telegram.exe''')
+                if 'telegram' in str(st):
+                    print('Opening Telegram')
+                    v.Speak('Opening Telegram')
+                    os.startfile(r'''C:\Users\asus1\AppData\Roaming\Telegram Desktop\Telegram.exe''')
+                elif 'Chrome' in str(st):
+                    print('Opening Chrome')
+                    v.Speak('Opening Chrome')
+                    os.startfile(r'''C:\Program Files (x86)\Google\Chrome\Application\chrome.exe''')
             elif wtis in message:
                 try:
                     scq=cl.query(message)
@@ -222,7 +231,7 @@ while True:
                         del words[0:2]
                         st=' '.join(words)
                         wkpres=wikipedia.summary(st,sentences=2)
-                        print('\n'+'str(wkpres)'+'\n')
+                        print('\n'+str(wkpres)+'\n')
                         v.Speak(wkpres)
                     except UnicodeEncodeError:
                         v.Speak(wkpres)
@@ -239,8 +248,6 @@ while True:
                     scq=cl.query(message)
                     sca=next(scq.results).text
                     print('The answer is: '+str(sca))
-                    #url='https://www.wolframalpha.com/input/?i='+st
-                    #webbrowser.open(url)
                     v.Speak('The answer is: '+str(sca))
                 except UnicodeEncodeError:
                     v.Speak('The answer is: '+str(sca))
@@ -251,6 +258,25 @@ while True:
                     print('Google results for: '+str(st))
                     url='https://google.com/search?q='+st
                     webbrowser.open(url)
+            elif playmusic in message:
+                words=message.split()
+                del words[0:1]
+                song_name=str(' '.join(words))
+                base = "https://www.youtube.com/results?search_query="
+                r = requests.get(base+song_name)
+                page = r.text
+                soup=bs(page,'html.parser')
+                vids = soup.findAll('a',attrs={'class':'yt-uix-tile-link'})
+                videolist=[]
+                for v in vids:
+                    tmp = 'https://www.youtube.com' + v['href']
+                    videolist.append(tmp)
+                v = pafy.new(videolist[0])
+                song=str(v.title)
+                print('Checking for best available quality: '+song)
+                best=v.getbest(preftype="webm")
+                best_url=best.url
+                webbrowser.open(best_url)
 
             elif keywd in message:
                 print('')
