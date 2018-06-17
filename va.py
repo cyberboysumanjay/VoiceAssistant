@@ -20,7 +20,7 @@ r.pause_threshold=0.7
 r.energy_threshold=500
 shell=wincl.Dispatch("WScript.Shell")
 #v.Speak('Hello! For a list of commands, please say "Keyword list"...')
-#v.Speak('At your service Sir!')
+v.Speak('At your service Sir!')
 #print('Hello! For a list of commands, please say "Keyword list"...')
 
 #List of commands
@@ -54,6 +54,7 @@ paint = 'open paint'
 playmusic='play'
 dlmusic='download song'
 dlvideo='download video'
+mgntlink='magnet link for'
 
 
 while True:
@@ -61,10 +62,9 @@ while True:
         try:
             v.Speak("How can I help you today?")
             print("Waiting for your command")
-            audio = r.listen(source, timeout = None)
+            audio = r.listen(source, timeout=None)
             message = str(r.recognize_google(audio))
             print('You said: ' + message)
-            v.Speak('Alright, I will do this for you')
             if google in message:
                 words=message.split()
                 del words[0:2]
@@ -73,6 +73,32 @@ while True:
                 url='https://google.com/search?q='+st
                 webbrowser.open(url)
                 v.Speak('Google Results for: '+str(st))
+            elif mgntlink in message:
+                words=message.split()
+                del words[0:3]
+                st=' '.join(words)
+                query=str(st)
+                url='https://thepiratebay.org/search/'+query+'/0/99/0'
+                print("Searching......")
+                source=requests.get(url).text
+                soup=bs(source,'lxml')
+                results=soup.find_all('div',class_='detName')
+                i=1
+                for r in results:
+                    print(i,r.text)
+                    i=i+1
+                print("Enter the Serial Number of the search item you like to download: ")
+                v.Speak("Enter the Serial Number of the search item you like to download: ")
+                choice=int(input())
+                print ("Fetching data.....")
+                v.Speak ("Fetching data.....")
+                magnet_results=soup.find_all('a',title='Download this torrent using magnet')
+                a=[]
+                for m in magnet_results:
+                    a.append(m['href'])
+                magnet_link=(a[choice-1])
+                print("Magnet Link of your selected choice has been fetched.")
+                v.Speak ("Here is your magnet link")
             elif acad in message:
                 words=message.split()
                 del words[0:2]
@@ -316,7 +342,6 @@ while True:
                 print('Checking for best available audio quality for: '+song)
                 best=v.getbestaudio()
                 best.download()
-
 
 
             elif keywd in message:

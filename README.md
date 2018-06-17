@@ -32,6 +32,8 @@ Download song: Just ask 'Download song X'
 
 Download video: Just ask 'Download video X'
 
+Search and get magnet link for torrent files: Just ask 'Magnet Link for X' 
+
 .....many more to come!
 ### [More about me](https://cyberboysumanjay.github.io)
 ### [Telegram](t.me/cyberboysumanjay)
