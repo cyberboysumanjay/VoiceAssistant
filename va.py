@@ -78,7 +78,7 @@ while True:
                 del words[0:3]
                 st=' '.join(words)
                 query=str(st)
-                url='https://thepiratebay.org/search/'+query+'/0/99/0'
+                url='https://pirateproxy.mx/search/'+query+'/0/99/0'
                 print("Searching......")
                 source=requests.get(url).text
                 soup=bs(source,'lxml')
@@ -98,7 +98,8 @@ while True:
                     a.append(m['href'])
                 magnet_link=(a[choice-1])
                 print("Magnet Link of your selected choice has been fetched.")
-                v.Speak ("Here is your magnet link")
+                pyperclip.copy(magnet_link)
+                v.Speak ("Your magnet link is now in your clipboard.")
             elif acad in message:
                 words=message.split()
                 del words[0:2]
