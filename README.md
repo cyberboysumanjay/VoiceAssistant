@@ -1,5 +1,6 @@
 # Voice Assistant
 A very simple voice assistant written in python.
+Tested on Windows 10 with Python 3.6
 
 ## What things this assistant can do:
 Google search: Just ask 'Search for X' and it will show Google results for X.
@@ -36,7 +37,7 @@ Search and get magnet link for torrent files: Just ask 'Magnet Link for X'
 
 .....many more to come!
 ### [More about me](https://cyberboysumanjay.github.io)
-### [Telegram](t.me/cyberboysumanjay)
+### [Telegram](https://t.me/cyberboysumanjay)
 
 
 
